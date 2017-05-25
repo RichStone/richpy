@@ -1,16 +1,17 @@
-from flask import Flask, redirect
+from flask import Flask, redirect, render_template
 from flask import request
+
 
 app = Flask(__name__)
 print(app)
 
 @app.route('/')
 def index():
-    return '<h1>RichPy!</h1>'
+    return render_template('index.html')
 
 @app.route('/user/<name>')
 def user(name):
-    return '<h1>Hey, %s!</h1>' % name
+    return render_template('user.html', name=name)
 
 @app.route('/agent')
 def agent():
