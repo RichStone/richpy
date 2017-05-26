@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>richCode(M m) { return m++ }</title>
-</head>
-<body>
-    <h1>richCode(M m) { return (AI + ML) * m }</h1>
-    <h2>super ugly index page</h2>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}RichCode{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Grow Big</h1>
+</div>
+<p>Forgot your name? Good here some info for you:
+    {{ moment(current_time).format('LLL') }}.
+</p>
+<p>That was {{ moment(current_time).fromNow(refresh=True) }}</p>
+{% endblock %}
