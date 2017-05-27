@@ -3,12 +3,20 @@ from flask_script import Shell, Manager
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from datetime import datetime
+from flask_wtf import Form
+from wtforms import IntegerField, SubmitField
+from wtforms.validators import DataRequired
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'YphciR469$$'
 
 manager = Manager(app)
 bootstrap = Bootstrap(app)
 moment = Moment(app)
+
+class AgeForm(Form):
+    age = IntegerField('We need your age for the AI: ', validators=[DataRequired()])
+    submit = SubmitField('Feed')
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -18,9 +26,14 @@ def page_not_found(e):
 def internal_server_error(e):
     return render_template('500.html'), 500
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html', current_time=datetime.utcnow())
+    age = None
+    form = AgeForm()
+    if form.validate_on_submit():
+        age = form.age.data
+        form.age.data = ''
+    return render_template('index.html', form=form, age=age, current_time=datetime.utcnow())
 
 @app.route('/user/<name>')
 def user(name):
