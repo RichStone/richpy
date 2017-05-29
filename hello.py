@@ -1,5 +1,4 @@
 from flask import Flask, redirect, request, render_template, session, url_for, flash
-from flask_script import Shell, Manager
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from datetime import datetime
@@ -10,7 +9,6 @@ from wtforms.validators import DataRequired
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'YphciR469$$'
 
-manager = Manager(app)
 bootstrap = Bootstrap(app)
 moment = Moment(app)
 
@@ -53,4 +51,4 @@ def redir():
     return redirect('https://www.amazon.com')
 
 if __name__ == '__main__':
-    manager.run()
+    app.run()
