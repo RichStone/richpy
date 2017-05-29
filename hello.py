@@ -1,4 +1,4 @@
-from flask import Flask, redirect, request, render_template
+from flask import Flask, redirect, request, render_template, session, url_for, flash
 from flask_script import Shell, Manager
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
@@ -28,12 +28,16 @@ def internal_server_error(e):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    age = None
     form = AgeForm()
     if form.validate_on_submit():
-        age = form.age.data
+        old_age = session.get('age')
+        if old_age is not None and old_age != form.age.data:
+            flash('You changed your age!')
+        session['age'] = form.age.data
         form.age.data = ''
-    return render_template('index.html', form=form, age=age, current_time=datetime.utcnow())
+        return redirect(url_for('index'))
+    return render_template('index.html', form=form, age=session.get('age'),
+                           current_time=datetime.utcnow())
 
 @app.route('/user/<name>')
 def user(name):
