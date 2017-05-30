@@ -3,39 +3,38 @@ from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from datetime import datetime
 from flask_wtf import Form
-from wtforms import IntegerField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms import StringField, IntegerField, SubmitField
+from wtforms.validators import DataRequired, Length, Regexp
 from flask_sqlalchemy import SQLAlchemy
 from pathlib import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
-
 # configure data base
 app.config['SQLALCHEMY_DATABASE_URI']=\
     'sqlite:///' + os.path.join(basedir, 'data.sqlite')
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
-db = SQLAlchemy(app)
-
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'YphciR469$$'
 
 bootstrap = Bootstrap(app)
 moment = Moment(app)
+db = SQLAlchemy(app)
 
 class Role(db.Model):
     __tablename__ = 'roles'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(64), unique=True)
 
     def __repr__(self):
         return '<Role %r>' % self.name
 
-    users = db.relationship('User', backref='role')
+    users = db.relationship('User', backref='role', lazy='dynamic')
 
 class User(db.Model):
     __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(64), unique=True, index=True)
 
     def __repr__(self):
@@ -43,7 +42,8 @@ class User(db.Model):
 
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
-class AgeForm(Form):
+class DataVultureForm(Form):
+    name = StringField('Name required for the database: ', validators=[DataRequired(), Length(min=1, max=20)])
     age = IntegerField('We need your age for the AI: ', validators=[DataRequired()])
     submit = SubmitField('Feed')
 
@@ -57,15 +57,27 @@ def internal_server_error(e):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    form = AgeForm()
+    form = DataVultureForm()
     if form.validate_on_submit():
+        user = User.query.filter_by(username=form.name.data).first()
+        if user is None:
+            user = User(username = form.name.data)
+            db.session.add(user)
+            session['known'] = False
+        else:
+            session['known'] = True
+        session['name'] = form.name.data
+        form.name.data = ''
         old_age = session.get('age')
         if old_age is not None and old_age != form.age.data:
             flash('You changed your age!')
         session['age'] = form.age.data
         form.age.data = ''
         return redirect(url_for('index'))
-    return render_template('index.html', form=form, age=session.get('age'),
+    return render_template('index.html',
+                           form=form,
+                           name=session.get('name'), age=session.get('age'),
+                           known = session.get('known', False),
                            current_time=datetime.utcnow())
 
 @app.route('/user/<name>')
