@@ -1,4 +1,5 @@
 from flask import Flask, redirect, request, render_template, session, url_for, flash
+from flask_script import Shell, Manager
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from datetime import datetime
@@ -7,6 +8,7 @@ from wtforms import StringField, IntegerField, SubmitField
 from wtforms.validators import DataRequired, Length, Regexp
 from flask_sqlalchemy import SQLAlchemy
 from pathlib import os
+from flask_migrate import Migrate, MigrateCommand
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -18,9 +20,11 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'YphciR469$$'
 
+manager = Manager(app)
 bootstrap = Bootstrap(app)
 moment = Moment(app)
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 class Role(db.Model):
     __tablename__ = 'roles'
@@ -42,10 +46,20 @@ class User(db.Model):
 
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
+class Test(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(64))
+
 class DataVultureForm(Form):
     name = StringField('Name required for the database: ', validators=[DataRequired(), Length(min=1, max=20)])
     age = IntegerField('We need your age for the AI: ', validators=[DataRequired()])
     submit = SubmitField('Feed')
+
+def make_shell_context():
+    return dict(app=app, db=db, User=User, Role=Role)
+manager.add_command("shell", Shell(make_context=make_shell_context))
+
+manager.add_command('db', MigrateCommand)
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -94,4 +108,4 @@ def redir():
     return redirect('https://www.amazon.com')
 
 if __name__ == '__main__':
-    app.run()
+    manager.run()
