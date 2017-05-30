@@ -46,10 +46,6 @@ class User(db.Model):
 
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
-class Test(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String(64))
-
 class DataVultureForm(Form):
     name = StringField('Name required for the database: ', validators=[DataRequired(), Length(min=1, max=20)])
     age = IntegerField('We need your age for the AI: ', validators=[DataRequired()])
