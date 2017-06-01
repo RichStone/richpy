@@ -1,4 +1,4 @@
-from flask import Flask, redirect, request, render_template, session, url_for, flash
+from flask import Flask, redirect, request, session, url_for, flash
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from flask_mail import Mail
@@ -21,8 +21,7 @@ def create_app(config_name):
     db.init_app(app)
 
     # attach routes and custom error pages
+    from .main import main as main_blueprint
+    app.register_blueprint(main_blueprint)
 
     return app
-
-
-
