@@ -10,9 +10,9 @@ class Config:
     RICHPY_ADMIN = os.environ.get('FLASKY_ADMIN')
 
 
-@staticmethod
-def init_app(app):
-    pass
+    @staticmethod
+    def init_app(app):
+        pass
 
 class DevelopmentConfig(Config):
     DEBUG = True
