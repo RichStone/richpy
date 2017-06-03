@@ -5,9 +5,9 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    FLASKY_MAIL_SUBJECT_PREFIX = '[richpy]'
-    FLASKY_MAIL_SENDER = 'Flasky Admin <richard.had@hotmail.de>'
-    FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
+    RICHPY_MAIL_SUBJECT_PREFIX = '[richpy]'
+    RICHPY_MAIL_SENDER = 'Richpy Admin <richard.had@hotmail.de>'
+    RICHPY_ADMIN = os.environ.get('FLASKY_ADMIN')
 
 
 @staticmethod
