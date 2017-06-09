@@ -1,10 +1,5 @@
 {% extends "bootstrap/base.html" %}
 
-{% block scripts %}
-{{ super() }}
-{{ moment.include_moment() }}
-{% endblock %}
-
 {% block title %}RichCode{% endblock %}
 
 {% block head %}
@@ -29,6 +24,13 @@
             <ul class="nav navbar-nav">
                 <li><a href="/">Buum</a></li>
             </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('auth.logout') }}"></a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('auth.login') }}"></a></li>
+                {% endif %}
+            </ul>
         </div>
     </div>
 </div>
@@ -45,4 +47,9 @@
 
     {% block page_content %}{% endblock %}
 </div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ moment.include_moment() }}
 {% endblock %}
