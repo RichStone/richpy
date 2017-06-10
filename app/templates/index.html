@@ -12,13 +12,4 @@
     <h3>Nice to see you again!</h3>
     {% endif %}
 </div>
-{{ wtf.quick_form(form) }}
-    <p>{% if age %} Thanks, you are {{ age }} years old. The AI will now be happy.
-        {% else %}Feed him!{% endif %}</p>
-    <br>
-    <br>
-<p>Forgot your name? Good, here some useful info for you:
-    {{ moment(current_time).format('LLL') }}.
-</p>
-<p>That was {{ moment(current_time).fromNow(refresh=True) }}</p>
 {% endblock %}

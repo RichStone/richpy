@@ -13,6 +13,7 @@ def login():
             login_user(user, form.remember_me.data)
             return redirect(request.args.get('next') or url_for('main.index'))
         flash('Invalid username or password.')
+    form='asfdasdf'
     return render_template('auth/login.html', form=form)
 
 @auth.route('/logout')
