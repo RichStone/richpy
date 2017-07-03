@@ -14,7 +14,15 @@ def workspace():
                     due=form.due.data if form.due.data else None,
                     state=0)
         db.session.add(item)
+        db.session.commit()
         flash('Great!')
         return redirect(url_for('todo.workspace'))
     items = Item.query.all()
     return render_template('todo/workspace.html', form=form, items=items)
+
+@todo.route('/delete/<item_id>', methods=['POST'])
+def delete(item_id):
+    item = Item.query.get(item_id)
+    db.session.delete(item)
+    db.session.commit()
+    return redirect(url_for('todo.workspace'))

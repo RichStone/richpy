@@ -6,7 +6,7 @@
 {% block page_content %}
 <div class="container">
     <div class="page-header">
-        <h2>Create TODO</h2>
+        <h3>Create TODO</h3>
     </div>
     <div class="col-xs-6">
         {{ wtf.quick_form(form) }}
@@ -14,23 +14,30 @@
 </div>
 
 <div class="container-fluid">
+    <div class="page-header">
+        <h3>My TODOs</h3>
+    </div>
     {% for item in items %}
-        <div class="well row">
-            <div class="col-xs-3 pull-left">
+        <div class="container">
+            <div class="btn-info text-center row col-xs-4">
+                Due: {{ item.due }}
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="well row">
+            <div class="row col-xs-5 pull-left">
                 <h4 class="">{{ item.title }}</h4>
             </div>
-            <div class="col-xs-5">
+            <div class="row col-xs-5">
                 <p class="">{{ item.description }}</p>
             </div>
-            <div class="col-xs-2">
-                <p class="">{{ item.due }}</p>
-            </div>
-            <div class="col-xs-1 pull-right">
+            <div class="checkbox row col-xs-1 text-right">
                 <label><input type="checkbox" value="{{ item.state }}">done</label>
             </div>
-            <div class="col-xs-1 pull-right">
-                <input type="button" class="btn-danger" value="X">
-            </div>
+            <form class="form-group row col-xs-1 pull-right" action="{{ url_for('todo.delete', item_id=item.id) }}" method="post">
+                <input type="submit" class="btn-danger" value="X">
+            </form>
+        </div>
         </div>
     {% endfor %}
 </div>
