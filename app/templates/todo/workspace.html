@@ -23,7 +23,11 @@
                 Due: {{ item.due }}
             </div>
         </div>
-        <div class="container-fluid">
+        <div class="container-fluid {% if item.state %}
+        bg-success
+        {% else %}
+        bg-info
+        {% endif %}">
             <div class="well row">
             <div class="row col-xs-5 pull-left">
                 <h4 class="">{{ item.title }}</h4>
@@ -31,13 +35,25 @@
             <div class="row col-xs-5">
                 <p class="">{{ item.description }}</p>
             </div>
-            <div class="checkbox row col-xs-1 text-right">
-                <label><input type="checkbox" value="{{ item.state }}">done</label>
-            </div>
-            <form class="form-group row col-xs-1 pull-right" action="{{ url_for('todo.delete', item_id=item.id) }}" method="post">
+            <form class="form-group row col-xs-2 pull-right" action="{{ url_for('todo.delete', item_id=item.id) }}" method="post">
                 <input type="submit" class="btn-danger" value="X">
             </form>
         </div>
+            <div class="checkbox row col-xs-2 text-center pull-right">
+                <label><input type="checkbox" value="done" disabled="disabled" {% if item.state %}checked{% endif %}>done</label>
+            </div>
+        {% if not item.state %}
+            <div>
+                <form class="row col-xs-3 btn pull-left" action="{{ url_for('todo.change_state', item_id=item.id, state=not item.state) }}" method="post">
+                    <button type="submit" class="btn btn-info">Finished <span class="glyphicon glyphicon-thumbs-up"></span></button>
+                </form>
+            </div>
+        {% endif %}
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <hr>
+            </div>
         </div>
     {% endfor %}
 </div>

@@ -20,9 +20,18 @@ def workspace():
     items = Item.query.all()
     return render_template('todo/workspace.html', form=form, items=items)
 
+
 @todo.route('/delete/<item_id>', methods=['POST'])
 def delete(item_id):
     item = Item.query.get(item_id)
     db.session.delete(item)
+    db.session.commit()
+    return redirect(url_for('todo.workspace'))
+
+
+@todo.route('/change_state/<item_id>/<state>', methods=['POST'])
+def change_state(item_id, state):
+    item = Item.query.get(item_id)
+    item.state = state
     db.session.commit()
     return redirect(url_for('todo.workspace'))
