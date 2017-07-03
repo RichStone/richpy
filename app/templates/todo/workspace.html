@@ -4,12 +4,34 @@
 {% block title %}TODO App{% endblock %}
 
 {% block page_content %}
-<div class="page-header">
-    <h1>My TODOs</h1>
-</div>
-<div>
-    <div class="col-md-4">
+<div class="container">
+    <div class="page-header">
+        <h2>Create TODO</h2>
+    </div>
+    <div class="col-xs-6">
         {{ wtf.quick_form(form) }}
     </div>
+</div>
+
+<div class="container-fluid">
+    {% for item in items %}
+        <div class="well row">
+            <div class="col-xs-3 pull-left">
+                <h4 class="">{{ item.title }}</h4>
+            </div>
+            <div class="col-xs-5">
+                <p class="">{{ item.description }}</p>
+            </div>
+            <div class="col-xs-2">
+                <p class="">{{ item.due }}</p>
+            </div>
+            <div class="col-xs-1 pull-right">
+                <label><input type="checkbox" value="{{ item.state }}">done</label>
+            </div>
+            <div class="col-xs-1 pull-right">
+                <input type="button" class="btn-danger" value="X">
+            </div>
+        </div>
+    {% endfor %}
 </div>
 {% endblock %}

@@ -42,9 +42,12 @@ class Item(db.Model):
     __tablename__ = 'items'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(64))
-    description = db.Column(db.String(256))
-    due = db.Column(db.DateTime)
-    state = db.Column(db.Boolean)
+    description = db.Column(db.String(256), default=None)
+    due = db.Column(db.DateTime, default=None)
+    state = db.Column(db.Boolean, default=0)
+
+    def __repr__(self):
+        return '<Item %r' % self.title
 
 
 @login_manager.user_loader
