@@ -38,6 +38,15 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
 
+class Item(db.Model):
+    __tablename__ = 'items'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(64))
+    description = db.Column(db.String(256))
+    due = db.Column(db.DateTime)
+    state = db.Column(db.Boolean)
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
