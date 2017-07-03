@@ -23,6 +23,7 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a href="/">Buum</a></li>
+                <li><a href="{{ url_for('todo.workspace') }}">TODO App</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated %}

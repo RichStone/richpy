@@ -8,7 +8,8 @@
     <h1>My TODOs</h1>
 </div>
 <div>
-    <label for="new_task">New Task: </label>
-    <input type="text" id="new_task">
+    <div class="col-md-4">
+        {{ wtf.quick_form(form) }}
+    </div>
 </div>
 {% endblock %}
