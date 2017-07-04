@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
 from . import todo
 from .forms import NewTaskForm
 from ..models import Item
@@ -7,6 +7,7 @@ from app import db
 
 @todo.route('/workspace', methods=['GET', 'POST'])
 def workspace():
+    redirect(url_for('todo.workspace'))
     form = NewTaskForm()
     if form.validate_on_submit():
         item = Item(title=form.title.data,
@@ -35,3 +36,12 @@ def change_state(item_id, state):
     item.state = state
     db.session.commit()
     return redirect(url_for('todo.workspace'))
+
+
+@todo.route('/search', methods=['POST'])
+def search():
+    form = NewTaskForm()
+    search_string = request.form['search_string']
+    items = Item.query.filter(Item.title.contains(search_string))
+    backlink = True if items else False
+    return render_template('todo/workspace.html', form=form, items=items, backlink=backlink)
