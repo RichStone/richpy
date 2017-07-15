@@ -40,8 +40,8 @@ def change_state(item_id, state):
 
 @todo.route('/search', methods=['POST'])
 def search():
-    form = NewTaskForm()
     search_string = request.form['search_string']
     items = Item.query.filter(Item.title.contains(search_string))
-    backlink = True if items else False
-    return render_template('todo/workspace.html', form=form, items=items, backlink=backlink)
+    if items.first() is None:
+        items = None
+    return render_template('todo/search_results.html', items=items)

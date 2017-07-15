@@ -4,7 +4,6 @@
 {% block title %}TODO App{% endblock %}
 
 {% block page_content %}
-    {% if not backlink %}
     <div class="container">
         <div class="page-header">
             <h3>Create TODO</h3>
@@ -13,7 +12,7 @@
             {{ wtf.quick_form(form) }}
         </div>
     </div>
-    {% endif %}
+
 <div class="row">
     <div class="col-lg-8 col-lg-offset-2">
         <hr>
@@ -31,11 +30,6 @@
                 <button class="btn btn-default" type="button">Find Title <span class="glyphicon glyphicon-search"></span></button>
             </span>
         </form>
-        {% if backlink %}
-                <form class="row" action="{{ url_for('todo.workspace') }}" margin-bottom="50px" method="post">
-                    <button type="submit" class="btn btn-warning btn-block">Back to All <span class="glyphicon glyphicon-fast-backward"></span></button>
-                </form>
-        {% endif %}
     </div>
     {% for item in items %}
         <div class="container">
