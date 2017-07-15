@@ -6,14 +6,11 @@
 {% block page_content %}
 <div class="page-header">
     <h1>Hello, {% if name %}{{ name }}{% else %}Stranger!{% endif %}</h1>
+    <hr>
     {% if not known %}
-        <h3>
-            This perl is under construction but you can already use
-            our <a href="{{ url_for('todo.workspace') }}">TODO application</a>.
-        </h3>
-        <h2>Coming next:</h2>
+        <h5>Coming next:</h5>
         <ul>
-        <li>The Unbelievable TicTacToe AI Adventure</li>
+        <li>The DeepTacToe Adventure</li>
         </ul>
     {% else %}
     <h3>Nice to see you again!</h3>
